@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Добро пожаловать в сервис рассылок!</h1>
+
+        {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-header">Всего рассылок</div>
+                        <div class="card-body">
+                            <h5 class="card-title display-4">{{ total_mailings }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-header">Активных рассылок</div>
+                        <div class="card-body">
+                            <h5 class="card-title display-4">{{ active_mailings }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-info mb-3">
+                        <div class="card-header">Уникальных получателей</div>
+                        <div class="card-body">
+                            <h5 class="card-title display-4">{{ total_recipients }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h4 class="alert-heading">Добро пожаловать!</h4>
+                <p>Для использования сервиса необходимо <a href="{% url 'users:login' %}">войти</a> или
+                <a href="{% url 'users:register' %}">зарегистрироваться</a>.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

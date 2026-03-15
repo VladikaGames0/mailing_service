@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ message.subject }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{{ message.subject }}</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Информация о сообщении</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Тема:</strong> {{ message.subject }}</p>
+        <p><strong>Текст сообщения:</strong></p>
+        <div class="alert alert-light">
+            {{ message.body|linebreaks }}
+        </div>
+        <p><strong>Владелец:</strong> {{ message.owner.email|default:"Не указан" }}</p>
+        <p><strong>Дата создания:</strong> {{ message.id|default:"-" }}</p>
+    </div>
+    <div class="card-footer">
+        {% if message.owner == user or user.is_superuser %}
+            <a href="{% url 'mailing:message_update' message.pk %}" class="btn btn-warning">Изменить</a>
+            <a href="{% url 'mailing:message_delete' message.pk %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+        <a href="{% url 'mailing:message_list' %}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

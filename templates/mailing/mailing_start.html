@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Запуск рассылки{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h3 class="text-center">Запуск рассылки #{{ mailing.id }}</h3>
+            </div>
+            <div class="card-body">
+                <h5>Информация о рассылке:</h5>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        <strong>Сообщение:</strong> {{ mailing.message.subject }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Дата начала:</strong> {{ mailing.start_time|date:"d.m.Y H:i" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Дата окончания:</strong> {{ mailing.end_time|date:"d.m.Y H:i" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Статус:</strong>
+                        {% if mailing.status == 'created' %}
+                            <span class="badge bg-secondary">Создана</span>
+                        {% elif mailing.status == 'started' %}
+                            <span class="badge bg-success">Запущена</span>
+                        {% else %}
+                            <span class="badge bg-danger">Завершена</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Получателей:</strong> {{ mailing.recipients.count }}
+                    </li>
+                </ul>
+
+                {% if mailing.status == 'started' %}
+                    <div class="alert alert-info">
+                        <p>Вы уверены, что хотите запустить эту рассылку сейчас?</p>
+                        <p>Будет отправлено <strong>{{ mailing.recipients.count }}</strong> писем.</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Подтвердить запуск</button>
+                        <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-secondary">Отмена</a>
+                    </form>
+                {% else %}
+                    <div class="alert alert-danger">
+                        <p>Рассылку можно запустить только в статусе "Запущена".</p>
+                        <p>Текущий статус:
+                            {% if mailing.status == 'created' %}
+                                <span class="badge bg-secondary">Создана</span>
+                            {% else %}
+                                <span class="badge bg-danger">Завершена</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-secondary">Вернуться к рассылке</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

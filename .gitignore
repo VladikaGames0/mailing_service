@@ -1,0 +1,40 @@
+# Виртуальное окружение
+venv/
+env/
+ENV/
+.venv/
+
+# База данных
+*.sqlite3
+*.db
+
+# Файлы конфиденциальных данных
+.env
+.env.local
+*.env
+
+# Файлы IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Файлы Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Директории с установочными файлами
+*.egg-info/
+dist/
+build/
+
+# Медиа файлы (но не папку)
+media/
+!media/.gitkeep
+
+# Кеш
+cache/
+*.log

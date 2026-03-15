@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Попытки рассылок{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Попытки рассылок</h1>
+
+{% if attempts %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Рассылка</th>
+                    <th>Дата и время</th>
+                    <th>Статус</th>
+                    <th>Ответ сервера</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in attempts %}
+                <tr>
+                    <td>{{ attempt.id }}</td>
+                    <td>Рассылка #{{ attempt.mailing.id }} ({{ attempt.mailing.message.subject }})</td>
+                    <td>{{ attempt.attempt_time|date:"d.m.Y H:i:s" }}</td>
+                    <td>
+                        {% if attempt.status == 'success' %}
+                            <span class="badge bg-success">Успешно</span>
+                        {% else %}
+                            <span class="badge bg-danger">Не успешно</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ attempt.server_response|default:"-"|truncatechars:50 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Пока нет попыток рассылок.
+    </div>
+{% endif %}
+{% endblock %}

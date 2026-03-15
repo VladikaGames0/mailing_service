@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Профиль пользователя</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        {{ form.email.errors }}
+                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}"
+                               class="form-control" value="{{ form.email.value|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Имя</label>
+                        {{ form.first_name.errors }}
+                        <input type="text" name="{{ form.first_name.name }}" id="{{ form.first_name.id_for_label }}"
+                               class="form-control" value="{{ form.first_name.value|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Фамилия</label>
+                        {{ form.last_name.errors }}
+                        <input type="text" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}"
+                               class="form-control" value="{{ form.last_name.value|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.phone.id_for_label }}" class="form-label">Телефон</label>
+                        {{ form.phone.errors }}
+                        <input type="tel" name="{{ form.phone.name }}" id="{{ form.phone.id_for_label }}"
+                               class="form-control" value="{{ form.phone.value|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.country.id_for_label }}" class="form-label">Страна</label>
+                        {{ form.country.errors }}
+                        <input type="text" name="{{ form.country.name }}" id="{{ form.country.id_for_label }}"
+                               class="form-control" value="{{ form.country.value|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.avatar.id_for_label }}" class="form-label">Аватар</label>
+                        {{ form.avatar.errors }}
+                        {% if user.avatar %}
+                            <div class="mb-2">
+                                <img src="{{ user.avatar.url }}" alt="Аватар" style="max-width: 200px;">
+                            </div>
+                        {% endif %}
+                        <input type="file" name="{{ form.avatar.name }}" id="{{ form.avatar.id_for_label }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

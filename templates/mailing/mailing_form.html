@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Редактирование{% else %}Создание{% endif %} рассылки{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{% if object %}Редактирование{% else %}Создание{% endif %} рассылки</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="{{ form.start_time.id_for_label }}" class="form-label">Дата и время начала</label>
+        {{ form.start_time.errors }}
+        <input type="datetime-local" name="{{ form.start_time.name }}" id="{{ form.start_time.id_for_label }}"
+               class="form-control" value="{{ form.start_time.value|date:'Y-m-d\TH:i'|default:'' }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.end_time.id_for_label }}" class="form-label">Дата и время окончания</label>
+        {{ form.end_time.errors }}
+        <input type="datetime-local" name="{{ form.end_time.name }}" id="{{ form.end_time.id_for_label }}"
+               class="form-control" value="{{ form.end_time.value|date:'Y-m-d\TH:i'|default:'' }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.message.id_for_label }}" class="form-label">Сообщение</label>
+        {{ form.message.errors }}
+        <select name="{{ form.message.name }}" id="{{ form.message.id_for_label }}" class="form-select" required>
+            <option value="">---------</option>
+            {% for message in form.message.field.queryset %}
+                <option value="{{ message.id }}" {% if form.message.value|stringformat:"s" == message.id|stringformat:"s" %}selected{% endif %}>
+                    {{ message.subject }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.recipients.id_for_label }}" class="form-label">Получатели</label>
+        {{ form.recipients.errors }}
+        <select name="{{ form.recipients.name }}" id="{{ form.recipients.id_for_label }}" class="form-select" multiple size="5" required>
+            {% for recipient in form.recipients.field.queryset %}
+                <option value="{{ recipient.id }}" {% if recipient.id in form.recipients.value %}selected{% endif %}>
+                    {{ recipient.full_name }} ({{ recipient.email }})
+                </option>
+            {% endfor %}
+        </select>
+        <small class="text-muted">Удерживайте Ctrl для выбора нескольких получателей</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'mailing:mailing_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
